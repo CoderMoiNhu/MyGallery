@@ -40,7 +40,6 @@
    - Name : LE DINH MINH PHUC
    - YoB : 2007
    - Nationality : Vietnamese
-   - Start learning programming from February 2023
    ## Contact
    - Email : minkhale2011@gmail.com
    - [Facebook](https://www.facebook.com/phuclee1120)
