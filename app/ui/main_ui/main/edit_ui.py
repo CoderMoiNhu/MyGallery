@@ -356,7 +356,6 @@ image=CTkImage(dark_image=Image.open(BASE_DIR/'asset'/'feather'/'cut.png').resiz
         self.only_height=new_height            
         self.virtual_storage.close()
         self.virtual_storage=None
-        gc.collect()
         self.virtual_storage=BytesIO()
         self.final_image_crop.save(self.virtual_storage,self.format)
         self.apply_to_main_image(self.final_image_crop,self.only_width,self.only_height)
@@ -367,7 +366,6 @@ image=CTkImage(dark_image=Image.open(BASE_DIR/'asset'/'feather'/'cut.png').resiz
     def reset_crop_img(self):
         self.virtual_storage.close()
         self.virtual_storage=None
-        gc.collect()
         self.virtual_storage=BytesIO()
         for i in self.crop_list:
             i.save(self.virtual_storage,self.format)
@@ -484,7 +482,6 @@ image=CTkImage(dark_image=Image.open(BASE_DIR/'asset'/'feather'/'cut.png').resiz
                 rotated_image=image.rotate(-180)
             self.virtual_storage.close()
             self.virtual_storage=None
-            gc.collect()
             self.virtual_storage=BytesIO()
             rotated_image.save(self.virtual_storage,self.format)
             width,height=rotated_image.size
@@ -536,7 +533,6 @@ image=CTkImage(dark_image=Image.open(BASE_DIR/'asset'/'feather'/'flip.png').resi
         image1=image.transpose(Image.FLIP_LEFT_RIGHT)
         self.virtual_storage.close()
         self.virtual_storage=None
-        gc.collect()
         self.virtual_storage=BytesIO()
         image1.save(self.virtual_storage,self.format)
         self.apply_to_main_image(image1,self.only_width,self.only_height)
@@ -950,16 +946,16 @@ image=CTkImage(dark_image=Image.open(BASE_DIR/'asset'/'feather'/'save.png').resi
         self.setting_contrast.place(x=230,y=60)
         self.setting_contrast.bind('<B1-Motion>',lambda e:self.reset_current_value1())
         self.setting_contrast.bind('<ButtonPress-1>',lambda e:self.reset_current_value1())
-        self.current_value2=f'{self.setting_contrast.get():.2f}'
+        self.current_value2=(f'{self.setting_contrast.get():.2f}')
         self.current2_value_label=CTkLabel(master=self.work_with_image_frame,width=30,height=20,fg_color='#0C0C0C',font=('Roboto',16),text_color='white',text=self.current_value2)
         self.current2_value_label.place(x=635,y=45)
+
 
         self.contrast_information=CTkLabel(master=self.work_with_image_frame,width=40,height=40,text='',
         image=CTkImage(dark_image=Image.open(BASE_DIR/'asset'/'feather'/'information.png').resize((40,40),Image.BILINEAR),size=(40,40)))
         self.contrast_information.place(x=135,y=105)
         self.contrast_information.bind('<Enter>',lambda e: self.contrast_information_func())
         self.contrast_information.bind('<Leave>',lambda e: self.contrast_information_frame.destroy())
-        
         reset=CTkButton(master=self.work_with_image_frame,width=150,height=50,hover_color='#222222',fg_color='#0C0C0C',command=self.reset_contrast,corner_radius=30,
   text='', image=CTkImage(dark_image=Image.open(BASE_DIR/'asset'/'feather'/'reset.png').resize((50,50),Image.BILINEAR),size=(50,50)))
         reset.place(x=1250,y=10)
@@ -983,11 +979,12 @@ image=CTkImage(dark_image=Image.open(BASE_DIR/'asset'/'feather'/'save.png').resi
     def reset_current_value1(self):
         self.current_value2=f'{self.setting_contrast.get():.2f}'
         self.current2_value_label.configure(text=self.current_value2)
-        self.contrast_value=float(self.current_value2)
+        self.main_image.bind('<ButtonPress-1>',lambda e: self.change_contrast_image())
     def change_contrast_image(self):
+        self.current_value2=f'{self.setting_contrast.get():.2f}'
         image=self.origin_image_contrast
         enhance=ImageEnhance.Contrast(image)
-        self.enhance_img=enhance.enhance(self.contrast_value)
+        self.enhance_img=enhance.enhance(float(self.current_value2))
         if self.main_image:
             self.apply_to_main_image(self.enhance_img,self.only_width,self.only_height)
     def reset_contrast(self):
@@ -1002,7 +999,7 @@ image=CTkImage(dark_image=Image.open(BASE_DIR/'asset'/'feather'/'save.png').resi
                 defaultextension='*.png',
                 filetypes=(('PNG Files','*.png'),('JPG Files','*.jpg'),('JPEG Files','*.jpeg'),('GIF Files','*.gif')))
         if file_save:
-            self.enhance_img.save(file_save)
+            self.enhance_img.save (file_save)
     def move_to_filter_color_feature(self):
         self.virtual_storage.seek(0)
         image=self.virtual_storage.read()
