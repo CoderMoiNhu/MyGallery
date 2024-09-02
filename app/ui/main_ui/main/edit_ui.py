@@ -153,6 +153,7 @@ class EditUI(CTkFrame):
             self.all_options.unbind('<ButtonPress-1>')
             self.main_image.unbind('<Button-3>')
             self.main_image.unbind('<ButtonPress-1>')
+            self.main_image.unbind('<Motion-B1>')
             self.virtual_storage.close()
             self.virtual_storage=None
             gc.collect()
